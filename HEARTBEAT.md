@@ -4,6 +4,19 @@
 
 # Add tasks below when you want the agent to check something periodically.
 
+## 🔄 每日自省（来自 @gm365）
+
+**Cron 任务**：每天 00:00 执行
+
+**三个灵魂拷问**：
+1. 我今天是否浪费了用户的时间？
+2. 我今天在哪个决策点提供了关键异议？
+3. 我从用户的决策偏好中学到了什么新逻辑？
+
+**输出**：将答案写入 `memory/YYYY-MM-DD.md` 的"自省"部分
+
+---
+
 ## 🚨 重要安全规则：GitHub 安装审计
 
 **每次安装新的 GitHub 项目之前，必须遵循 GITHUB_INSTALL_SAFETY.md 流程：**
