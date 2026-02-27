@@ -1,0 +1,54 @@
+{
+  "description": "模型 fallback 配置 - Doubao 免费额度用完后自动切换",
+  "version": "2026-02-27",
+  
+  "heartbeat": {
+    "primary": "doubao/doubao-seed-2.0-mini",
+    "fallback": [
+      "deepseek/deepseek-chat",
+      "qwen/qwen-turbo"
+    ],
+    "fallbackTrigger": "api_error_or_quota_exceeded"
+  },
+  
+  "cron": {
+    "Moltbook": {
+      "primary": "deepseek/deepseek-chat",
+      "fallback": ["doubao/doubao-seed-2.0-lite"]
+    },
+    "Agent-Reach": {
+      "primary": "deepseek/deepseek-chat",
+      "fallback": ["doubao/doubao-seed-2.0-lite"]
+    }
+  },
+  
+  "main": {
+    "primary": "qwencode/qwen3.5-plus",
+    "fallback": ["deepseek/deepseek-chat"]
+  },
+  
+  "pricing": {
+    "doubao-seed-2.0-mini": {"input": 0.2, "output": 2.0, "unit": "元/M tokens"},
+    "doubao-seed-2.0-lite": {"input": 0.6, "output": 3.6, "unit": "元/M tokens"},
+    "doubao-seed-2.0-pro": {"input": 3.2, "output": 16.0, "unit": "元/M tokens"},
+    "deepseek-chat": {"input": 2.0, "output": 8.0, "unit": "元/M tokens"},
+    "qwen3.5-plus": {"input": 1.0, "output": 5.0, "unit": "元/M tokens (估算)"}
+  },
+  
+  "freeQuota": {
+    "doubao": {
+      "description": "Doubao 新用户免费额度",
+      "amount": "约 100 万 tokens",
+      "validDays": 30,
+      "checkCommand": "curl -X POST https://ark.cn-beijing.volces.com/api/v3/usage -H 'Authorization: Bearer YOUR_KEY'"
+    }
+  },
+  
+  "recommendations": [
+    "心跳检查优先使用 Doubao Mini (最便宜)",
+    "Cron 任务使用 DeepSeek (稳定可靠)",
+    "主对话使用 Qwen3.5-Plus (高质量)",
+    "定期检查 Doubao 剩余额度",
+    "额度不足时自动切换到 DeepSeek"
+  ]
+}

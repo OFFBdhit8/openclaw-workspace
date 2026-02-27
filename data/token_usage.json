@@ -1,0 +1,40 @@
+{
+  "daily_stats": {
+    "2026-02-25": {
+      "total_tokens": 1300,
+      "total_requests": 5,
+      "cheap_requests": 3,
+      "premium_requests": 2,
+      "search_requests": 2
+    }
+  },
+  "model_usage": {
+    "abab6.5-chat": {
+      "total_tokens": 270,
+      "total_requests": 2,
+      "last_used": "2026-02-25T21:01:52.174610"
+    },
+    "deepseek-chat": {
+      "total_tokens": 350,
+      "total_requests": 1,
+      "last_used": "2026-02-25T21:01:52.173086"
+    },
+    "moonshot-v1-8k": {
+      "total_tokens": 500,
+      "total_requests": 1,
+      "last_used": "2026-02-25T21:01:52.175635"
+    },
+    "qwen-turbo": {
+      "total_tokens": 180,
+      "total_requests": 1,
+      "last_used": "2026-02-25T21:01:52.176480"
+    }
+  },
+  "cost_savings": {
+    "total_saved": 228.66666666666666,
+    "cheap_usage_percent": 60.0,
+    "estimated_savings": 42.0,
+    "last_calculated": "2026-02-25T21:01:52.176491"
+  },
+  "last_updated": "2026-02-25T21:01:52.176494"
+}

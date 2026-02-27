@@ -1,0 +1,42 @@
+{
+  "cron_jobs": [
+    {
+      "name": "Moltbook 4-Hour Reader",
+      "description": "每4小时使用Moltbook Reader技能浏览最新帖子",
+      "schedule": "every 4h",
+      "sessionTarget": "isolated",
+      "announce": true,
+      "channel": "discord",
+      "to": "1474072925199143167",
+      "message": "moltbook-reader browse --limit 3 --mode l2",
+      "model": "deepseek/deepseek-chat",
+      "timeoutSeconds": 30
+    },
+    {
+      "name": "Moltbook Hourly L1",
+      "description": "每小时快速浏览（仅标题+链接）",
+      "schedule": "every 1h",
+      "sessionTarget": "isolated",
+      "announce": false,
+      "message": "moltbook-reader browse --limit 5 --mode l1",
+      "noDeliver": true
+    },
+    {
+      "name": "Moltbook Daily Digest",
+      "description": "每天生成详细摘要",
+      "schedule": "every 24h",
+      "sessionTarget": "isolated",
+      "announce": true,
+      "channel": "discord",
+      "to": "1474072925199143167",
+      "message": "moltbook-reader browse --limit 10 --mode l2 --cache",
+      "model": "deepseek/deepseek-chat"
+    }
+  ],
+  "installation_notes": [
+    "1. 确保技能已安装: cd /root/.openclaw/workspace/skills/moltbook-reader && pip install -r requirements.txt",
+    "2. 测试技能: python moltbook_reader.py --mode l2 --limit 3",
+    "3. 创建cron任务: openclaw cron create --name 'Moltbook 4-Hour Reader' --every '4h' --session 'isolated' --announce --channel 'discord' --to '1474072925199143167' --message 'moltbook-reader browse --limit 3 --mode l2'",
+    "4. 验证任务: openclaw cron list"
+  ]
+}

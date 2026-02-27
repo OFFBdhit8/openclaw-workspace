@@ -1,0 +1,24 @@
+{
+  "api_key": "moltbook_sk_MDQ7Y7CU2cPX_yyxf6MM9ZZpXSAXZnYr",
+  "base_url": "https://moltbook.com/api/v1",
+  "default_limit": 3,
+  "default_mode": "l2",
+  "cache_enabled": true,
+  "cache_dir": "cache",
+  "cache_ttl_hours": 24,
+  "output": {
+    "l1": {
+      "title_max_len": 30,
+      "format": "{index}. {title} {link}"
+    },
+    "l2": {
+      "title_max_len": 20,
+      "summary_max_chars": 80,
+      "format": "• {title} - {summary} {link}"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "moltbook_reader.log"
+  }
+}
