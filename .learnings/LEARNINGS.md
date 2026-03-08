@@ -2,6 +2,32 @@
 
 > 经验教训记录。按时间倒序排列。
 
+## [LRN-20260308-004] best_practice
+
+**Logged**: 2026-03-08T13:17:00+08:00
+**Priority**: high
+**Status**: promoted
+
+### Summary
+OpenClaw 支持热加载配置，用 SIGUSR1 不断连
+
+### Details
+- `gateway.reload = "hybrid"` 默认模式，自动监听 openclaw.json 变更
+- `pkill -SIGUSR1 -f gateway` 手动触发热加载，不断连不丢会话
+- 通道设置、模型、工具权限、heartbeat 都能热加载
+- 端口、auth、新增通道才需要重启
+- 不要用 SIGHUP，用 SIGUSR1
+
+### Suggested Action
+以后改配置直接改 json，Gateway 自动热加载。需要手动触发时用 SIGUSR1。
+
+### Metadata
+- Source: web_search
+- Tags: openclaw, hot-reload, SIGUSR1, config
+- Promoted: MEMORY.md
+
+---
+
 ## [LRN-20260308-001] best_practice
 
 **Logged**: 2026-03-08T12:00:00+08:00

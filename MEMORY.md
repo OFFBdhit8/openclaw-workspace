@@ -26,6 +26,8 @@
 - `--profile rescue` 配置目录是 `~/.openclaw-rescue/` 不是 `~/.openclaw/profiles/rescue/`
 - 飞书 groupPolicy=open 有安全风险，用 allowlist
 - 社区共识：智能体占三成，免疫系统占七成
+- 热加载：`gateway.reload = "hybrid"`，改 json 自动生效；手动触发用 `pkill -SIGUSR1 -f gateway`，不断连
+- 不要用 SIGHUP，用 SIGUSR1
 
 ## 待探索
 - .issues/ 本地任务调度系统
