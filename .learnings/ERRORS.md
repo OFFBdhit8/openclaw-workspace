@@ -2,6 +2,30 @@
 
 > 错误记录。按时间倒序排列。
 
+## [ERR-20260308-003] gateway-reload-config
+
+**Logged**: 2026-03-08T13:18:00+08:00
+**Priority**: medium
+**Status**: resolved
+
+### Summary
+`gateway.reload` 配置格式错误，应该是对象不是字符串
+
+### Error
+`Invalid input: expected object, received string`
+
+### Context
+- 写了 `"reload": "hybrid"`
+- 实际应该是 `"reload": {"mode": "hybrid"}`
+
+### Suggested Fix
+OpenClaw 配置里复杂字段都是对象格式，不要用字符串简写
+
+### Resolution
+- **Resolved**: 2026-03-08T13:19:00+08:00
+
+---
+
 ## [ERR-20260308-001] gateway-install
 
 **Logged**: 2026-03-08T12:15:00+08:00
