@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "grok-research": {
+      "name": "Grok Research",
+      "zip_url": "http://lightmake.site/api/v1/download?slug=grok-research",
+      "source": "skillhub",
+      "version": "1.0.0"
+    }
+  }
+}

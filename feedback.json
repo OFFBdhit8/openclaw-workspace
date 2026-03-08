@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "date": "2026-03-08",
+      "issue": "从会话内执行 openclaw gateway restart 导致命令挂起",
+      "root_cause": "重启 Gateway 会断开当前 WebSocket 连接，exec 拿不到返回",
+      "fix": "用 systemctl --user restart 或让老板手动跑",
+      "severity": "medium"
+    },
+    {
+      "date": "2026-03-08",
+      "issue": "--profile rescue 配置写到了错误路径",
+      "root_cause": "以为路径是 ~/.openclaw/profiles/rescue/，实际是 ~/.openclaw-rescue/",
+      "fix": "profile 名为 X 时，配置目录固定为 ~/.openclaw-X/",
+      "severity": "low"
+    },
+    {
+      "date": "2026-03-08",
+      "issue": "gateway install --force 覆盖了主机的 systemd 服务文件",
+      "root_cause": "openclaw gateway install 默认写 openclaw-gateway.service，不区分 profile",
+      "fix": "手动创建 openclaw-gateway-rescue.service，不依赖 install 命令",
+      "severity": "high"
+    },
+    {
+      "date": "2026-03-08",
+      "issue": "救援机配置格式不对，models.default 字段不存在",
+      "root_cause": "照猜写的配置，没参考主机实际结构",
+      "fix": "先 cat 主机配置看清结构再写，用 agents.defaults.model.primary",
+      "severity": "medium"
+    }
+  ]
+}
