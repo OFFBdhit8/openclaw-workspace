@@ -1,0 +1,15 @@
+# Watchdog Dashboard
+
+- updatedAt: `2026-03-09T03:13:01+08:00`
+
+- **Main** 🟢
+  - status: `healthy`
+  - http: `200`
+  - failCount: `0/3`
+  - lastAction: `none`
+
+- **Rescue** 🟢
+  - status: `healthy`
+  - http: `200`
+  - failCount: `0/3`
+  - lastAction: `none`

@@ -1,12 +1,13 @@
 #!/bin/bash
 set -euo pipefail
-TARGET_NAME="rescue"
 TARGET_PORT=19789
 TARGET_SERVICE="openclaw-gateway-rescue.service"
 LOG_FILE="/root/.openclaw/watchdog-rescue.log"
 FAIL_COUNT_FILE="/root/.openclaw/watchdog-rescue-fails"
 ALERT_FILE="/root/.openclaw/alert-rescue-down"
 STATUS_FILE="/root/.openclaw/workspace/memory/watchdog-status.json"
+DASHBOARD_SCRIPT="/root/.openclaw/workspace/scripts/render-watchdog-dashboard.sh"
+DASHBOARD_FILE="/root/.openclaw/workspace/memory/watchdog-dashboard.md"
 MAX_FAILS=3
 CHECK_URL="http://127.0.0.1:${TARGET_PORT}/health"
 
@@ -19,7 +20,7 @@ HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-tim
 
 write_status(){
 python3 - <<PY
-import json, os
+import json
 p = "$STATUS_FILE"
 try:
     data = json.load(open(p))
@@ -36,14 +37,34 @@ data['rescue'] = {
 with open(p, 'w') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 PY
+[ -x "$DASHBOARD_SCRIPT" ] && "$DASHBOARD_SCRIPT" >/dev/null 2>&1 || true
+}
+
+notify_feishu(){
+  local title="$1"
+  local extra="$2"
+  local dashboard
+  dashboard=$(cat "$DASHBOARD_FILE" 2>/dev/null || echo 'dashboard unavailable')
+  /root/.nvm/versions/node/v22.22.0/bin/openclaw --profile rescue run --message "使用 message 工具发送一条飞书群消息到群 oc_1dac3242c001625735760f54c579b7ec（channel=feishu）。消息内容如下，原样发送，不要补充：${title}
+${extra}
+
+${dashboard}" >> /root/.openclaw/watchdog-notify.log 2>&1 || true
 }
 
 if [ "$HTTP_CODE" = "200" ]; then
-  if [ "$FAILS" -gt 0 ]; then echo "$(ts) [RECOVERED] rescue recovered after ${FAILS} fails" >> "$LOG_FILE"; fi
+  if [ "$FAILS" -gt 0 ]; then
+    echo "$(ts) [RECOVERED] rescue recovered after ${FAILS} fails" >> "$LOG_FILE"
+    echo 0 > "$FAIL_COUNT_FILE"
+    FAILS=0
+    write_status healthy recovered
+    rm -f "$ALERT_FILE"
+    notify_feishu "[Watchdog] 救援 Gateway 已恢复" "目标=rescue 端口=19789 原先连续失败，当前已恢复。时间=$(ts)"
+    exit 0
+  fi
   echo 0 > "$FAIL_COUNT_FILE"
-  rm -f "$ALERT_FILE"
   FAILS=0
   write_status healthy none
+  rm -f "$ALERT_FILE"
   exit 0
 fi
 
@@ -65,10 +86,13 @@ if [ "$FAILS" -ge "$MAX_FAILS" ]; then
     FAILS=0
     HTTP_CODE="$HTTP_AFTER"
     write_status healthy restart-fixed
+    notify_feishu "[Watchdog] 救援 Gateway 自动恢复成功" "目标=rescue 端口=19789 原因=连续${MAX_FAILS}次健康检查失败，已自动重启并恢复。时间=$(ts)"
     exit 0
   fi
   echo "$(ts) [CRITICAL] rescue still down after restart HTTP=${HTTP_AFTER:-ERR}" >> "$LOG_FILE"
   echo "$(ts) rescue gateway still unhealthy after auto-restart" > "$ALERT_FILE"
   HTTP_CODE="$HTTP_AFTER"
   write_status critical restart-failed
+  # 注意：若 rescue 彻底挂死，此处可能无法通过 rescue 飞书发出，best-effort
+  notify_feishu "[Watchdog] 救援 Gateway 故障未自动恢复" "目标=rescue 端口=19789 状态=连续${MAX_FAILS}次健康检查失败且重启后仍异常 HTTP=${HTTP_AFTER:-ERR}。时间=$(ts)"
 fi
