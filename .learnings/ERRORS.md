@@ -2,6 +2,29 @@
 
 > 错误记录。按时间倒序排列。
 
+## [ERR-20260308-004] rescue-node-path
+
+**Logged**: 2026-03-08T13:22:00+08:00
+**Priority**: medium
+**Status**: resolved
+
+### Summary
+救援机 systemd 服务 PATH 缺少 nvm 实际路径，导致 `openclaw status` 报 `node: not found`
+
+### Error
+PATH 里用了 `/root/.nvm/current/bin`（符号链接可能不存在），实际路径是 `/root/.nvm/versions/node/v22.22.0/bin`
+
+### Context
+手动创建 systemd 服务文件时照抄了不完整的 PATH
+
+### Suggested Fix
+systemd 服务文件的 PATH 必须包含 `/root/.nvm/versions/node/v22.22.0/bin`
+
+### Resolution
+- **Resolved**: 2026-03-08T13:22:00+08:00
+
+---
+
 ## [ERR-20260308-003] gateway-reload-config
 
 **Logged**: 2026-03-08T13:18:00+08:00
