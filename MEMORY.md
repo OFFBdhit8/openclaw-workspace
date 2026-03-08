@@ -12,7 +12,7 @@
 - 救援机 Gateway：端口 19789，模型 gpt-5.4
 - 飞书机器人 x2：主机 + 救援机（cli_a920618557789bcd）
 - Discord Bot：服务器 1473676822960144560
-- API 供应商：ikuncode（Claude/GPT/Grok），计费标准见 https://api.ikuncode.cc/pricing
+- API 供应商：ikuncode（Claude/GPT/Grok），计费标准见 https://api.ikuncode.cc/pricing （查价时打开 Ratio 开关看分组倍率）
 - Camofox 反检测浏览器：端口 9377
 
 ## 工具链
