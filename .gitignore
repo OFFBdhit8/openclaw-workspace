@@ -22,3 +22,13 @@ node_modules/
 *.tar.gz
 *.mp4
 *.mp3
+
+# Private local context (do not push)
+USER.md
+MEMORY.md
+TOOLS.md
+memory/
+config/
+Horizon/.env
+Horizon/data/config.json
+Horizon/.git/
