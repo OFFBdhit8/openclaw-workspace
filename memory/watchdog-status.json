@@ -1,0 +1,17 @@
+{
+  "updatedAt": "2026-03-09T03:08:04+08:00",
+  "main": {
+    "lastHttpCode": "200",
+    "failCount": 0,
+    "threshold": 3,
+    "status": "healthy",
+    "lastAction": "none"
+  },
+  "rescue": {
+    "lastHttpCode": "200",
+    "failCount": 0,
+    "threshold": 3,
+    "status": "healthy",
+    "lastAction": "none"
+  }
+}
