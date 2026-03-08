@@ -51,17 +51,19 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 5. **Brave Search API** — `web_search`（默认），$5/千次，月 $5 免费额度，已配置开箱即用
 6. **Tavily** — tavily skill，$8/千次，月免费 1,000 次，LLM 优化结构化摘要
 
-### Tier 2 — 待接入（值得加）
-7. **Serper** — $0.30/千次，最便宜付费方案，注册送 2500 次。比 Brave 便宜 16 倍
-8. **Firecrawl** — 搜到链接后读全文，比 web_fetch 结构化更好
-
 ### 决策规则
-- 普通搜索 → Camofox（免费 + 质量最高）
+- 普通搜索 → Camofox（免费 + Google 质量）
 - Camofox 挂了 → DuckDuckGo → Brave
 - 搜 X/Twitter → Grok
 - 需要结构化摘要喂 LLM → Tavily
-- 大批量搜索 → Brave / Serper（接入后）
-- 搜到链接读全文 → web_fetch（现有）/ Firecrawl（待接入）
+- 大批量搜索 → Brave（吃免费额度）
+- 搜到链接读全文 → web_fetch
 - 不确定 → Camofox 兜底
+
+### 不用的方案（评估过，不需要）
+- Serper — 虽然便宜（$0.30/千次），但 Camofox 免费搜 Google 已覆盖
+- Firecrawl — web_fetch 够用
+- SearXNG 自建 — 维护成本高，Camofox 已解决零成本问题
+- Gemini grounding — $35/千次，太贵
 
 Add whatever helps you do your job. This is your cheat sheet.
