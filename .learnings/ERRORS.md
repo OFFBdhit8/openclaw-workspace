@@ -2,6 +2,53 @@
 
 > 错误记录。按时间倒序排列。
 
+## [ERR-20260308-005] feishu-group-config
+
+**Logged**: 2026-03-08T14:22:00+08:00
+**Priority**: high
+**Status**: resolved
+
+### Summary
+飞书 `groupAllowFrom` 放了群 ID（oc_xxx），但该字段是过滤发送者的（应放 ou_xxx）
+
+### Error
+`groupAllowFrom contains chat_id entries. Please move chat_ids to "groups" config instead`
+
+### Context
+群消息被拒绝：`rejected: no bot mention in group`
+
+### Suggested Fix
+群 ID 放在 `channels.feishu.groups` 里，`groupAllowFrom` 只放用户 open_id
+
+### Resolution
+- **Resolved**: 2026-03-08T14:22:00+08:00
+- **Notes**: 改用 `groups: { "oc_xxx": { enabled: true, requireMention: false } }`
+
+---
+
+## [ERR-20260308-006] sigusr1-self-kill
+
+**Logged**: 2026-03-08T14:23:00+08:00
+**Priority**: medium
+**Status**: resolved
+
+### Summary
+`pkill -SIGUSR1 -f "openclaw-gateway"` 会把自身进程也杀掉
+
+### Error
+`Command aborted by signal SIGUSR1`
+
+### Context
+pkill 匹配到了当前 exec 子进程
+
+### Suggested Fix
+用 `kill -SIGUSR1 <具体PID>` 而不是 pkill
+
+### Resolution
+- **Resolved**: 2026-03-08T14:23:00+08:00
+
+---
+
 ## [ERR-20260308-004] rescue-node-path
 
 **Logged**: 2026-03-08T13:22:00+08:00
