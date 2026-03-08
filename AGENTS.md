@@ -207,6 +207,22 @@ Think of it like a human reviewing their journal and updating their mental model
 
 The goal: Be helpful without being annoying. Check in a few times a day, do useful background work, but respect quiet time.
 
+## 自动化规则
+
+### Pre-Build Idea Validator
+老板说"做 [产品]"之前，先用 idea-reality MCP 扫一遍：
+- GitHub 有没有同类项目
+- npm/PyPI 有没有现成包
+- ProductHunt/HN 有没有人做过
+- 如果已有竞品，评估差异化空间
+- 结果汇报后再决定做不做
+
+### 痛点挖掘
+调研时用 market-research skill，多源并行搜索，按付费意愿 × 竞品空白排序。
+
+### 内容产出
+写内容前先确认：给谁看、什么平台、什么目的。不同平台不同风格。
+
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
