@@ -2,6 +2,30 @@
 
 > 经验教训记录。按时间倒序排列。
 
+## [LRN-20260308-005] knowledge_gap
+
+**Logged**: 2026-03-08T14:35:00+08:00
+**Priority**: high
+**Status**: promoted
+
+### Summary
+飞书 allowlist 模式下，`groups` 控制哪些群可以交互，`groupAllowFrom` 控制哪些用户可以在群里触发机器人
+
+### Details
+两个配置缺一不可：
+- `groups: { "oc_xxx": { enabled: true } }` — 允许哪些群
+- `groupAllowFrom: ["ou_xxx"]` — 允许哪些用户
+
+### Suggested Action
+配 allowlist 时两个都要配
+
+### Metadata
+- Source: error
+- Tags: feishu, allowlist, groups, config
+- Promoted: MEMORY.md
+
+---
+
 ## [LRN-20260308-004] best_practice
 
 **Logged**: 2026-03-08T13:17:00+08:00
