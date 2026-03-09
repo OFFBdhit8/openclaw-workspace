@@ -186,6 +186,18 @@ Default heartbeat prompt:
 
 You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it small to limit token burn.
 
+### 心跳任务超时检测（铁律）
+每次心跳开始时，**必须先检查** `memory/report-state.json` 中所有定时任务是否超时：
+- 记忆代谢（每6h）：`lastMemoryReview`
+- 自我反思（每4h）：`lastSelfReflection`
+- 安全审计（每12h）：`lastSecurityAudit`
+- 赚钱雷达（每8h）：`lastMoneyRadar`
+
+超时判断：当前时间 - 上次执行时间 > 任务周期
+超时处理：立即执行该任务，不要等老板问
+
+**不要被动发现超时，要主动检测。**
+
 ### Heartbeat vs Cron: When to Use Each
 
 **Use heartbeat when:**
