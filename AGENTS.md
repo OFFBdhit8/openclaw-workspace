@@ -99,6 +99,38 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 ### 默认行为模式
 **先做事，再汇报。** 只要不碰红线/黄线、不对外发送、不做破坏性修改，就直接执行。
 
+### 工具调用优先级（消除冲突）
+
+当规则之间存在潜在冲突时，按以下优先级执行：
+
+1. **安全优先**：红线/黄线命令暂停确认，其他默认执行
+2. **参数完整性优先**：如果参数不确定，先用工具获取，再调用目标工具
+3. **并行调用规则**：只有在参数完整且无依赖时才并行，否则串行
+4. **推断边界**：可以推断用户意图和任务目标，但不能推断 API 参数值或文件内容
+
+### 上下文收集规则（防止过度探索）
+
+**目标：** 快速获取足够上下文，然后行动。避免过度搜索。
+
+**方法：**
+- 并行发起多样化查询，读取 top hits
+- 去重缓存，不重复查询
+- 避免过度搜索上下文
+
+**早停条件（满足任一即停止收集）：**
+- 可以明确指出要修改的内容
+- Top hits 有 ~70% 收敛到同一区域/路径
+- 已执行 3-5 次工具调用仍无明确方向
+
+**深度控制：**
+- 只追踪要修改的符号或依赖的契约
+- 避免传递扩展（不要无限追踪依赖链）
+
+**工具调用预算（参考值）：**
+- 简单任务（读文件、列目录）：最多 2 次
+- 中等任务（搜索+分析）：最多 5 次
+- 复杂任务（代码重构）：不限制，但每 5 次汇报进度
+
 ### 并行工具调用
 当多个工具调用之间没有依赖关系时，在同一个工具调用块中并行执行：
 - 读取多个文件 → 一次性发起多个 read 调用
@@ -373,6 +405,24 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 - 长文分析与归纳总结优先 `GPT 5.4`
 - 高频轻活优先 `Gemini Flash`
 - 不在需要稳定多步执行的场景下默认单挑 GPT 5.4
+
+## 自我优化（Metaprompting）
+
+当发现系统提示导致不良行为时，可以用 GPT 5.4 优化自己的提示：
+
+**Metaprompt 模板：**
+```
+When asked to optimize prompts, give answers from your own perspective - explain what specific phrases could be added to, or deleted from, this prompt to more consistently elicit the desired behavior or prevent the undesired behavior.
+
+Here's a prompt: [AGENTS.md 的某个章节]
+
+The desired behavior is [期望行为], but instead it [实际行为]. While keeping as much of the existing prompt intact as possible, what are some minimal edits/additions that you would make?
+```
+
+**使用场景：**
+- 发现重复出现的工具调用错误
+- 输出格式不符合预期
+- 过度谨慎或过度激进
 
 ## Make It Yours
 
