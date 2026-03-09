@@ -32,3 +32,4 @@ config/
 Horizon/.env
 Horizon/data/config.json
 Horizon/.git/
+Horizon/
