@@ -116,3 +116,26 @@ OpenClaw profile 名为 X 时，配置目录固定为 `~/.openclaw-X/`
 - Tags: architecture, self-healing, community
 
 ---
+
+## [LRN-20260309-006] correction
+
+**Logged**: 2026-03-09T21:18:00+08:00
+**Priority**: high
+**Status**: pending
+
+### Summary
+老板指出：外部检索任务不该先硬撞直连网页；任务拆解不能把“通道可用性验证”漏掉。
+
+### Details
+这次在做系统/社区/X/Reddit 自检时，先用直连访问 X/Reddit，遇到 403 后才补查 skill 和替代链路，导致结果半成品、节奏拖沓。根因不是工具缺失，而是任务拆解顺序错了：应该先验证通道，再选搜索链路，再汇总结论。
+
+### Suggested Action
+- 外部平台检索任务默认拆成三步：通道体检 → 证据抓取 → 结论汇总
+- X/Reddit/受限站点先查 `TOOLS.md` 和 `agent-reach doctor`
+- 复杂任务先给出“验证路径”，不要边试边汇报半成品
+- 模型选型要按任务类型：主会话稳定执行优先 Claude；长上下文/成本优先再考虑 GPT/Gemini
+
+### Metadata
+- Source: user_feedback
+- Related Files: TOOLS.md, memory/2026-03-09.md
+- Tags: correction, task-decomposition, search-routing, model-selection

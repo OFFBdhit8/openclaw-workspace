@@ -118,6 +118,9 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - yt-dlp：YouTube 视频+字幕提取
 - miku_ai：微信公众号搜索+阅读
 - Jina Reader：`curl https://r.jina.ai/<URL>` 任意网页转 Markdown
+- 先跑 `agent-reach doctor` 再选通道，先看“真的可用”不是只看 SKILL.md
+- 查 X 前先验证 `xreach` 认证状态；没 auth 就别把 X 当已完成
+- Reddit 一旦 403，立刻切 `PullPush API` / `Exa`，不要继续硬撞直连
 - 注意：所有命令需要 `export PATH="/root/.nvm/versions/node/v22.22.0/bin:$PATH"`
 
 ### 官方 API Keys
