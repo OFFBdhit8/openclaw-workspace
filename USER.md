@@ -7,7 +7,7 @@
 
 ## Context
 
-- 拥有一个工作室，目标：暴富
+- 启晋娴达工作室，目标：暴富
 - 技术栈：熟悉 OpenClaw、Discord bot、API 配置
 - 使用 ikuncode 作为 AI API 供应商（Claude + GPT）
 - 偏好：直接、不废话、中文交流、结果导向

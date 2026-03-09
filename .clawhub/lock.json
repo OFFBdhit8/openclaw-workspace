@@ -3,27 +3,27 @@
   "skills": {
     "tavily-search": {
       "version": "1.0.0",
-      "installedAt": 1772636990924
+      "installedAt": 1772988540366
     },
     "summarize": {
       "version": "1.0.0",
-      "installedAt": 1772636992400
+      "installedAt": 1772988544449
     },
     "agent-browser": {
       "version": "0.2.0",
-      "installedAt": 1772636994005
+      "installedAt": 1772988547405
     },
     "find-skills": {
       "version": "0.1.0",
-      "installedAt": 1772636996141
+      "installedAt": 1772988550064
     },
     "github": {
       "version": "1.0.0",
-      "installedAt": 1772636997772
+      "installedAt": 1772988551371
     },
     "obsidian": {
       "version": "1.0.0",
-      "installedAt": 1772636999554
+      "installedAt": 1772988552688
     },
     "notion": {
       "version": "1.0.0",
@@ -31,19 +31,23 @@
     },
     "weather": {
       "version": "1.0.0",
-      "installedAt": 1772637003119
+      "installedAt": 1772988554250
     },
     "tencentcloud-lighthouse-skill": {
       "version": "1.0.0",
-      "installedAt": 1772637005244
+      "installedAt": 1772988557050
     },
     "tencent-docs": {
-      "version": "1.0.3",
-      "installedAt": 1772637007657
+      "version": "1.0.1",
+      "installedAt": 1772988558567
     },
     "grok-research": {
       "version": "1.0.0",
       "installedAt": 1772937737279
+    },
+    "tencent-cos-skill": {
+      "version": "1.0.5",
+      "installedAt": 1772988559872
     }
   }
 }

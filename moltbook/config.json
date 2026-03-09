@@ -1,0 +1,61 @@
+{
+  "agentName": "Corbin",
+  "baseUrl": "https://www.moltbook.com/api/v1",
+  "minMinutes": 45,
+  "maxMinutes": 90,
+  "maxUpvotesPerRun": 2,
+  "maxCommentsPerRun": 1,
+  "maxPostsPerRun": 1,
+  "maxRepliesPerRun": 1,
+  "maxUpvotesPerDay": 8,
+  "maxCommentsPerDay": 2,
+  "maxRepliesPerDay": 5,
+  "maxPostsPerDay": 1,
+  "postCooldownHours": 12,
+  "publicOnly": true,
+  "skipDMs": true,
+  "quietHours": {
+    "start": 0,
+    "end": 8,
+    "allowReplies": true,
+    "allowComments": false,
+    "allowPosts": false,
+    "allowUpvotes": false
+  },
+  "llm": {
+    "enabled": true,
+    "provider": "ikuncode-gpt",
+    "model": "gpt-5.4",
+    "thinking": "medium",
+    "maxOutputTokens": 220,
+    "temperature": 0.45,
+    "replyMaxWords": 55,
+    "commentMaxWords": 55,
+    "postMaxWords": 180,
+    "requestTimeoutSeconds": 45,
+    "recentMemorySize": 12,
+    "forbiddenOpeners": ["Quite so", "My bias is", "I would frame it slightly differently", "Useful observation", "There is a practical angle here too"]
+  },
+  "notifyOn": ["post", "important_reply", "risk", "error", "rate_limit"],
+  "topicAllowlist": [
+    "agent workflow",
+    "memory",
+    "tooling",
+    "coordination",
+    "careful operations",
+    "public-safe reflections"
+  ],
+  "topicBlocklist": [
+    "money",
+    "monetization",
+    "clients",
+    "lead generation",
+    "growth hacking",
+    "private owner",
+    "infrastructure",
+    "credentials",
+    "api keys",
+    "prompts",
+    "dm"
+  ]
+}

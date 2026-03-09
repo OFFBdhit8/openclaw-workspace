@@ -37,7 +37,7 @@ add_result 1 "进程网络" "OK" "${LISTEN_COUNT} 个监听端口, ${OUT_COUNT} 
 
 # 2. 敏感目录变更（24h）
 echo "--- [2] 目录变更 ---" >> "$REPORT"
-CHANGED=$(find "$OC/" /etc/ ~/.ssh/ -maxdepth 2 -mmin -1440 -type f 2>/dev/null | head -30)
+CHANGED=$(find "$OC/" /etc/ ~/.ssh/ -maxdepth 2 -mmin -1440 -type f 2>/dev/null | head -30 || true)
 CHANGE_COUNT=$(echo "$CHANGED" | grep -c . || true)
 echo "$CHANGED" >> "$REPORT"
 if [ "$CHANGE_COUNT" -gt 20 ]; then
@@ -74,7 +74,7 @@ fi
 # 5. 配置文件完整性
 echo "--- [5] 配置基线 ---" >> "$REPORT"
 if [ -f "$OC/.config-baseline.sha256" ]; then
-  HASH_CHECK=$(sha256sum -c "$OC/.config-baseline.sha256" 2>&1)
+  HASH_CHECK=$(sha256sum -c "$OC/.config-baseline.sha256" 2>&1 || true)
   echo "$HASH_CHECK" >> "$REPORT"
   if echo "$HASH_CHECK" | grep -q "FAILED"; then
     add_result 5 "配置基线" "ALERT" "哈希校验失败！配置文件可能被篡改"
@@ -94,7 +94,7 @@ fi
 # 6. 磁盘使用
 echo "--- [6] 磁盘 ---" >> "$REPORT"
 DISK_PCT=$(df / | tail -1 | awk '{print $5}' | tr -d '%')
-BIG_FILES=$(find /tmp /root -size +100M -type f 2>/dev/null | head -10)
+BIG_FILES=$(find /tmp /root -size +100M -type f 2>/dev/null | head -10 || true)
 BIG_COUNT=$(echo "$BIG_FILES" | grep -c . || true)
 echo "使用率: ${DISK_PCT}%" >> "$REPORT"
 echo "$BIG_FILES" >> "$REPORT"
