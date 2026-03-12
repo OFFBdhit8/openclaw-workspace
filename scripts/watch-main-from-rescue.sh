@@ -45,7 +45,7 @@ notify_feishu(){
   local extra="$2"
   local dashboard
   dashboard=$(cat "$DASHBOARD_FILE" 2>/dev/null || echo 'dashboard unavailable')
-  /root/.nvm/versions/node/v22.22.0/bin/openclaw --profile rescue run --message "使用 message 工具发送一条飞书群消息到群 oc_1dac3242c001625735760f54c579b7ec（channel=feishu）。消息内容如下，原样发送，不要补充：${title}
+  /root/.local/share/pnpm/openclaw --profile rescue run --message "使用 message 工具发送一条飞书群消息到群 oc_1dac3242c001625735760f54c579b7ec（channel=feishu）。消息内容如下，原样发送，不要补充：${title}
 ${extra}
 
 ${dashboard}" >> /root/.openclaw-rescue/watchdog-notify.log 2>&1 || true

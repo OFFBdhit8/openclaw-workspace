@@ -61,18 +61,34 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ### 决策规则
 - 普通搜索 → Camofox（免费 + Google 质量）
-- Camofox 挂了 → DuckDuckGo → Brave
+- Camofox 挂了 → DuckDuckGo → ask-search → Brave
 - 搜 X/Twitter → Grok
 - 需要结构化摘要喂 LLM → Tavily
-- 大批量搜索 → Brave（吃免费额度）
+- 大批量搜索 → ask-search 优先，Brave 作为补位（省额度）
 - 搜到链接读全文 → web_fetch
 - 不确定 → Camofox 兜底
 
 ### 不用的方案（评估过，不需要）
 - Serper — 虽然便宜（$0.30/千次），但 Camofox 免费搜 Google 已覆盖
 - Firecrawl — web_fetch 够用
-- SearXNG 自建 — 维护成本高，Camofox 已解决零成本问题
 - Gemini grounding — $35/千次，太贵
+
+### ask-search / SearxNG（2026-03-10 已上线）
+- 命令入口：`ask-search`
+- 后端：本机 `SearxNG` 容器 `ask-search-searxng`
+- 监听：`127.0.0.1:18080`
+- 定位：本地自托管搜索底座，适合给 agent 提供 `json` 搜索结果；实现很薄，本质是 SearxNG 的 CLI/MCP 包装
+- 优点：零 API key、隐私更好、可做 CLI 或 MCP，适合作为 Camofox/Brave 的备用层
+- 缺点：要自己维护 `SearxNG`，还得处理 `json` 输出、反爬、代理和可用性；不是拿来就印钞的能力
+- 当前结论：作为通用搜索兜底层上线，优先级低于 Camofox / DuckDuckGo，高于付费 `Brave` 默认兜底
+- 健康检查：`scripts/ask-search/healthcheck.sh`
+- 回滚：`scripts/ask-search/rollback.sh`
+- 深读正文仍交给 `web_fetch` / 浏览器 / 代理链路
+
+### 审计自动化
+- 每天 `10:00` 跑 `scripts/audits/daily-skill-audit.sh`，每周日 `21:30` 跑 `scripts/audits/weekly-upgrade-review.sh`
+- 日报新增 `红/黄/绿` 分级：失败即红，有安全警告即黄，全绿才绿
+- `ask-search` 类检查失败会自动记入 `.learnings/ERRORS.md`；重复 ≥2 次时提升为长期操作规则
 
 ### ClawHub
 - CLI 限流极严，短时间多次请求必被 429
@@ -121,7 +137,20 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - 先跑 `agent-reach doctor` 再选通道，先看“真的可用”不是只看 SKILL.md
 - 查 X 前先验证 `xreach` 认证状态；没 auth 就别把 X 当已完成
 - Reddit 一旦 403，立刻切 `PullPush API` / `Exa`，不要继续硬撞直连
+- 现在已新增本地 skills：`skills/x-intel/`（X 专用路由）和 `skills/research-router/`（多平台调研总控）
+- 默认顺序：X 任务先 `x-intel`；多平台调研先 `research-router`；通用 web/Jina 只做兜底
 - 注意：所有命令需要 `export PATH="/root/.nvm/versions/node/v22.22.0/bin:$PATH"`
+
+### 插件/技能常驻策略（2026-03-12）
+- **主机常驻保留**：`wecom` / `qqbot` / `grok-research` / `tavily`
+- **按需启用，不常驻**：`adp-openclaw` / `listing-swarm`
+- `adp-openclaw` 已确认与腾讯云 ADP / OpenClaw 线索高度相关，不再按“野插件”处理；但因具备读环境变量 / 上传本地文件 / 调 CLI 能力，默认只保留安装，不在主机常驻面启用
+- `listing-swarm` 需要验证码、邮箱 IMAP、目录表单提交，默认视为增长重工具；仅在确实做目录投递时启用，用完收回
+- `wecom` 当前保留，但后续若继续收口，优先限制“任意本地路径文件发送”，改成白名单目录或仅允许 URL
+
+### 联网溯源纪律（2026-03-12 修正）
+- 查“插件/技能是谁的、做什么、是否可信”时，顺序固定：**本地 manifest / install record → npm registry / GitHub 一手来源 → ask-search / DuckDuckGo / Camofox 补入口 → Brave / Tavily 仅补漏**
+- 不准再对这类任务上来先撞 Brave；Brave/Tavily 是付费兜底，不是默认起手
 
 ### 官方 API Keys
 - **DeepSeek 官方**：`sk-7c00...088d` → `https://api.deepseek.com/v1`（¥4/M input, ¥16/M output）
@@ -133,15 +162,22 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - ⚠️ 必须用 coding.dashscope 的 Base URL，不是普通 dashscope（否则按量扣费）
 - **ikuncode（主力）**：已配置在 openclaw.json
 
-### API 用途分配（2026-03-09 路由定稿）
+### API 用途分配（2026-03-10 路由定稿）
 - **默认主脑 / 主会话 / 中复杂多步执行**：ikuncode-gpt（GPT 5.4）
-- **便宜主力 / 日常 coding / 低风险自动化**：ikuncode-gpt（GPT 5.1 / 5.1-codex / 5.1-codex-mini）
+- **代码主力 / 包月优先 / Bram**：aliyun-bailian `qwen3-coder-next`（默认）→ `qwen3-coder-plus`（降级省钱）
+- **内容整理 / 表达包装 / Corbin**：aliyun-bailian `kimi-k2.5`（默认）→ `qwen3.5-plus`（轻活降级）
 - **高频轻任务 / 批量摘要分类 / heartbeat 常规检查**：aliyun-bailian（包月优先）→ ikuncode-gemini（Gemini 2.5 Flash / Gemini 3 Flash）
-- **情报 / X / 社区 / 实时舆情**：ikuncode-grok（Grok 4.20 Beta / 4.1 Fast）
-- **高风险审计 / 架构设计 / 难题复核**：ikuncode-claude（Claude Sonnet 4.5 / 4.6 优先，Opus 只打关键位）
-- **备用 / 超长上下文专项**：Kimi 官方（尽量少用）
-- **专项兼容脚本**：DeepSeek 官方（尽量少用）
+- **情报 / X / 社区 / 实时舆情 / Eamon**：ikuncode-grok（Grok 4.1 Fast 默认，4.20 Beta 深挖）
+- **高风险审计 / 架构设计 / 难题复核 / Doran**：ikuncode-claude（Claude Sonnet 4.5 默认，4.6 升级）
+- **官方 Kimi / DeepSeek**：尽量少用，只做专项补位
 - **救援机默认思路**：主脑仍优先 GPT 5.4；高难复核可切 Claude Sonnet
+
+### 五人议会（2026-03-10 定稿）
+- **Auberon** → GPT 5.4（总参谋 / 最终拍板）
+- **Bram** → qwen3-coder-next（代码主力 / 执行层）
+- **Corbin** → 百炼 kimi-k2.5（内容整理 / 表达包装）
+- **Doran** → Claude Sonnet 4.5（审核 / 挑错 / 风险控制）
+- **Eamon** → Grok 4.1 Fast（X / 舆情 / 社区情报）
 
 ### ikuncode 原始价格与分组（基于 `/api/pricing`）
 #### 关键分组倍率

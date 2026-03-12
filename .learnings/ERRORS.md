@@ -2,6 +2,32 @@
 
 > 错误记录。按时间倒序排列。
 
+## [ERR-20260310-001] edit-tool-parameter-names
+
+**Logged**: 2026-03-10T21:04:00+08:00
+**Priority**: high
+**Status**: resolved
+
+### Summary
+`edit` 工具调用失败，原因不是文件内容，而是参数名写错
+
+### Error
+出现类似：`Edit: in ~/.openclaw/workspace/TOOLS.md (...) failed`，底层报错是缺少 `path` 参数
+
+### Context
+调用 `edit` 时误用了 `filePath` / `oldString` / `newString` 这类字段名，当前工具实际只认 `path` / `file_path`、`oldText` / `old_string`、`newText` / `new_string`
+
+### Suggested Fix
+- 默认只用 `path` + `oldText` + `newText`
+- 不再混用 `filePath` 这类字段名
+- 同一文件连续两次 `edit` 失败时，直接切 `write` 整文件覆写
+
+### Resolution
+- **Resolved**: 2026-03-10T21:04:00+08:00
+- **Notes**: 以后把 `edit` 的最小稳定参数集固定为 `path` / `oldText` / `newText`
+
+---
+
 ## [ERR-20260308-005] feishu-group-config
 
 **Logged**: 2026-03-08T14:22:00+08:00

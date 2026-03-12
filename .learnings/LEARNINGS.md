@@ -2,6 +2,28 @@
 
 > 经验教训记录。按时间倒序排列。
 
+## [LRN-20260310-001] best_practice
+
+**Logged**: 2026-03-10T20:52:00+08:00
+**Priority**: medium
+**Status**: pending
+
+### Summary
+`ask-search` 适合当自托管备用搜索底座，不适合现在替换当前主搜索链路
+
+### Details
+评估了 `ythx-101/ask-search` 后，确认它本质是对本地 `SearxNG` 的轻封装：优点是零 API key、隐私和结果格式可控；缺点是仍需自维护 `SearxNG`，且不能解决正文抓取和反爬问题。当前工作室已有 `Camofox + DuckDuckGo + Brave + Tavily + agent-reach` 组合，直接替换收益不高。
+
+### Suggested Action
+先把 `ask-search` 记为备用基础设施；只有当现有搜索链路不稳、成本抬头，或需要统一本地搜索出口时再接入。
+
+### Metadata
+- Source: research
+- Related Files: TOOLS.md, memory/ask-search-vs-current-search-2026-03-10.md
+- Tags: search, searxng, ask-search, infra
+
+---
+
 ## [LRN-20260308-005] knowledge_gap
 
 **Logged**: 2026-03-08T14:35:00+08:00
@@ -139,3 +161,25 @@ OpenClaw profile 名为 X 时，配置目录固定为 `~/.openclaw-X/`
 - Source: user_feedback
 - Related Files: TOOLS.md, memory/2026-03-09.md
 - Tags: correction, task-decomposition, search-routing, model-selection
+
+---
+
+## [LRN-20260310-002] best_practice
+
+**Logged**: 2026-03-10T21:31:00+08:00
+**Priority**: medium
+**Status**: pending
+
+### Summary
+本地自托管搜索底座最适合做通用搜索兜底，不适合一上来抢主链路
+
+### Details
+`ask-search + SearxNG` 已在本机跑通，验证可用。但实战里它更适合承担“主链路失败时补位”角色，而不是立刻替换 `Camofox / DuckDuckGo / Brave / Tavily`。最佳位置是低于免费高质量主链路，高于默认付费兜底。
+
+### Suggested Action
+通用搜索优先级固定为：`Camofox -> DuckDuckGo -> ask-search -> Brave -> Tavily`。把 `ask-search` 当统一 JSON 检索层，不把它当全文抓取器。
+
+### Metadata
+- Source: implementation
+- Related Files: skills/ask-search/SKILL.md, TOOLS.md
+- Tags: search, routing, fallback, ask-search

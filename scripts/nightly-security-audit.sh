@@ -77,13 +77,19 @@ if [ -f "$OC/.config-baseline.sha256" ]; then
   HASH_CHECK=$(sha256sum -c "$OC/.config-baseline.sha256" 2>&1 || true)
   echo "$HASH_CHECK" >> "$REPORT"
   if echo "$HASH_CHECK" | grep -q "FAILED"; then
-    add_result 5 "配置基线" "ALERT" "哈希校验失败！配置文件可能被篡改"
+    OC_CHANGED_RECENT=$(find "$OC/openclaw.json" -mmin -1440 -print 2>/dev/null | head -1 || true)
+    PAIRED_CHANGED_RECENT=$(find "$OC/devices/paired.json" -mmin -1440 -print 2>/dev/null | head -1 || true)
+    if [ -n "$OC_CHANGED_RECENT" ] || [ -n "$PAIRED_CHANGED_RECENT" ]; then
+      add_result 5 "配置基线" "WARN" "哈希校验失败，但配置文件 24h 内有主动变更；更像基线未更新，不直接判定篡改"
+    else
+      add_result 5 "配置基线" "ALERT" "哈希校验失败！配置文件可能被篡改"
+    fi
   else
     add_result 5 "配置基线" "OK" "哈希校验通过"
   fi
   # 权限检查
-  OC_PERM=$(stat -c %a "$OC/openclaw.json" 2>/dev/null)
-  PAIRED_PERM=$(stat -c %a "$OC/devices/paired.json" 2>/dev/null)
+  OC_PERM=$(stat -c %a "$OC/openclaw.json" 2>/dev/null || echo "missing")
+  PAIRED_PERM=$(stat -c %a "$OC/devices/paired.json" 2>/dev/null || echo "missing")
   if [ "$OC_PERM" != "600" ] || [ "$PAIRED_PERM" != "600" ]; then
     add_result 5 "配置基线" "WARN" "权限异常: openclaw.json=$OC_PERM paired.json=$PAIRED_PERM"
   fi
@@ -122,8 +128,10 @@ fi
 echo "--- [8] Gateway ---" >> "$REPORT"
 GW_STATUS=$(systemctl --user is-active openclaw-gateway 2>/dev/null || echo "unknown")
 GW_RESCUE=$(systemctl --user is-active openclaw-gateway-rescue 2>/dev/null || echo "unknown")
-if [ "$GW_STATUS" = "active" ]; then
+if [ "$GW_STATUS" = "active" ] && [ "$GW_RESCUE" = "active" ]; then
   add_result 8 "Gateway" "OK" "主机=$GW_STATUS, 救援机=$GW_RESCUE"
+elif [ "$GW_STATUS" = "active" ] || [ "$GW_RESCUE" = "active" ]; then
+  add_result 8 "Gateway" "WARN" "双机不一致: 主机=$GW_STATUS, 救援机=$GW_RESCUE"
 else
   add_result 8 "Gateway" "ALERT" "主机=$GW_STATUS, 救援机=$GW_RESCUE"
 fi

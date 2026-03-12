@@ -12,6 +12,8 @@
 - `cat /root/.openclaw-rescue/alert-gateway-down 2>/dev/null` — 告警文件
 - `df -h /` — 磁盘 >85% 告警
 - `free -h` — 内存状况
+- 检查近期日志里是否出现新的 schema / profile / plugin conflict 噪音（unknown keys、tool conflict、tools.profile warning）
+- 检查模型是否漂移（main / rescue 默认模型、thinkingDefault 是否被改坏）
 - 发现问题先修，修不了再通知老板
 - 全绿 → 不汇报，继续下一个任务
 
@@ -77,6 +79,7 @@
 仅白天 09:00-21:00 执行。轮换检查：
 - 扫描 memory/opportunities/ 下的机会清单，有没有到期或需要跟进的
 - 快速搜一下工作室相关领域的新动态（AI 工具、自动化、独立开发者赚钱）
+- 涉及 X / 社区 / GitHub / 多平台调研时，先走平台 skill 和专用通道，失败后才降级，并明确标注降级来源
 - 有值得关注的 → 简短通知老板
 - 没有 → 静默
 
